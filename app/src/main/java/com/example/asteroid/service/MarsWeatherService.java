@@ -24,7 +24,6 @@ public class MarsWeatherService {
 
     public void fetchMarsWeather(Context context, String apiKey, MarsWeatherCallback callback) {
         String url = "https://api.nasa.gov/insight_weather/?api_key=" + apiKey + "&feedtype=json&ver=1.0";
-
         RequestQueue queue = Volley.newRequestQueue(context);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -45,10 +44,15 @@ public class MarsWeatherService {
 
                             JSONObject pressure = solData.getJSONObject("PRE");
                             double avgPressure = pressure.getDouble("av");
+                            double minPressure = pressure.getDouble("mn");
+                            double maxPressure = pressure.getDouble("mx");
 
                             String season = solData.getString("Season");
 
-                            MarsSol marsSol = new MarsSol(sol, avgTemp, minTemp, maxTemp, avgPressure, season);
+                            MarsSol marsSol = new MarsSol(
+                                    sol, avgTemp, minTemp, maxTemp,
+                                    avgPressure, minPressure, maxPressure,
+                                    season);
                             solList.add(marsSol);
                         }
                         callback.onSuccess(solList);

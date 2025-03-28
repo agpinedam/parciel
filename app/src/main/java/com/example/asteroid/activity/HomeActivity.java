@@ -1,5 +1,6 @@
 package com.example.asteroid.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ public class HomeActivity extends AppCompatActivity {
 
     TextView solCount;
     ListView listView;
+    List<MarsSol> marsSolList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
         service.fetchMarsWeather(this, apiKey, new MarsWeatherService.MarsWeatherCallback() {
             @Override
             public void onSuccess(List<MarsSol> solList) {
+                marsSolList = solList;
                 solCount.setText("NB SOLS : " + solList.size());
                 MarsSolAdapter adapter = new MarsSolAdapter(HomeActivity.this, solList);
                 listView.setAdapter(adapter);
@@ -42,6 +45,21 @@ public class HomeActivity extends AppCompatActivity {
                 e.printStackTrace();
                 solCount.setText("Erreur de chargement des données");
             }
+        });
+
+        listView.setOnItemClickListener((adapterView, view, position, id) -> {
+            MarsSol selectedSol = marsSolList.get(position);
+            Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
+
+            intent.putExtra("solNumber", selectedSol.getSolNumber());
+            intent.putExtra("avgTemp", selectedSol.getAverageTemp());
+            intent.putExtra("minTemp", selectedSol.getMinTemp());
+            intent.putExtra("maxTemp", selectedSol.getMaxTemp());
+            intent.putExtra("avgPressure", selectedSol.getAveragePressure());
+            intent.putExtra("minPressure", selectedSol.getMinPressure());
+            intent.putExtra("maxPressure", selectedSol.getMaxPressure());
+
+            startActivity(intent);
         });
     }
 }
