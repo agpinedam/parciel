@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="#333333"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/solNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="Sol nº472"
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        android:layout_marginBottom="4dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/temperature"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Température :-52.90"
+            android:textColor="#dddddd"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/pressure"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Pression :639.95"
+            android:textColor="#dddddd"
+            android:textSize="16sp"
+            android:textAlignment="textEnd"/>
+    </LinearLayout>
+
+</LinearLayout>
