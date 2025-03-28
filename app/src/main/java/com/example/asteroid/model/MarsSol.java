@@ -1,5 +1,7 @@
 package com.example.asteroid.model;
 
+import java.util.List;
+
 public class MarsSol {
     private String solNumber;
     private double averageTemp;
@@ -32,4 +34,13 @@ public class MarsSol {
     public double getMinPressure() { return minPressure; }
     public double getMaxPressure() { return maxPressure; }
     public String getSeason() { return season; }
+    private List<WindData> windDataList;
+    public void setWindDataList(List<WindData> windDataList) {
+        this.windDataList = windDataList;
+    }
+
+    public List<WindData> getWindDataList() {
+        return windDataList;
+    }
+
 }

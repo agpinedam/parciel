@@ -33,4 +33,12 @@
         android:text="Pression : avg: 644.32 min: 618.27 max: 672.83"
         android:textSize="18sp"
         android:textColor="#dddddd"/>
+
+    <com.example.asteroid.view.WindRoseView
+        android:id="@+id/windRoseView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="20dp"/>
+
 </LinearLayout>

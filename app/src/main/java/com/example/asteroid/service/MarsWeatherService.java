@@ -7,12 +7,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.asteroid.model.MarsSol;
+import com.example.asteroid.model.WindData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class MarsWeatherService {
@@ -38,23 +40,47 @@ public class MarsWeatherService {
                             JSONObject solData = jsonResponse.getJSONObject(sol);
 
                             JSONObject temp = solData.getJSONObject("AT");
-                            double avgTemp = temp.getDouble("av");
-                            double minTemp = temp.getDouble("mn");
-                            double maxTemp = temp.getDouble("mx");
+                            double avgTemp = temp.optDouble("av", 0);
+                            double minTemp = temp.optDouble("mn", 0);
+                            double maxTemp = temp.optDouble("mx", 0);
 
                             JSONObject pressure = solData.getJSONObject("PRE");
-                            double avgPressure = pressure.getDouble("av");
-                            double minPressure = pressure.getDouble("mn");
-                            double maxPressure = pressure.getDouble("mx");
+                            double avgPressure = pressure.optDouble("av", 0);
+                            double minPressure = pressure.optDouble("mn", 0);
+                            double maxPressure = pressure.optDouble("mx", 0);
 
-                            String season = solData.getString("Season");
+                            String season = solData.optString("Season", "unknown");
 
                             MarsSol marsSol = new MarsSol(
                                     sol, avgTemp, minTemp, maxTemp,
                                     avgPressure, minPressure, maxPressure,
-                                    season);
+                                    season
+                            );
+
+                            List<WindData> windDataList = new ArrayList<>();
+                            if (solData.has("WD")) {
+                                JSONObject wdObject = solData.getJSONObject("WD");
+
+                                Iterator<String> keys = wdObject.keys();
+                                while (keys.hasNext()) {
+                                    String key = keys.next();
+                                    if (!key.equals("most_common")) {
+                                        JSONObject windDir = wdObject.optJSONObject(key);
+                                        if (windDir == null) continue;
+
+                                        float degrees = (float) windDir.optDouble("compass_degrees", 0);
+                                        int count = windDir.optInt("ct", 0);
+
+                                        windDataList.add(new WindData(degrees, count));
+                                    }
+                                }
+
+                                marsSol.setWindDataList(windDataList);
+                            }
+
                             solList.add(marsSol);
                         }
+
                         callback.onSuccess(solList);
 
                     } catch (JSONException e) {
